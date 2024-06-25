@@ -5,7 +5,7 @@
     name: Administration Rights
 
   subscription: 
-    version-number: 1
+    version-number: 15539011600225
 
   authorization-scheme: 
     type: Is In Role or Group
@@ -18,7 +18,9 @@
     evaluation-point: Once per Page View
 
   error: 
-    error-message: Insufficient privileges, user is not an Administrator
+    error-message: |
+      Insufficient privileges, user is not an Administrator
+      Test new changes to authorization scheme
 
 - # ====== Authorization: Reader Rights ========================
   id: 117785638703369253260

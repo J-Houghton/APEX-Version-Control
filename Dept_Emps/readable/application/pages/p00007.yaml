@@ -1,0 +1,1635 @@
+---
+# ====== Page: Test Report ===================================
+id: 7
+identification: 
+  name: Test Report
+  alias: TEST-REPORT
+  title: Test Report
+
+appearance: 
+  page-mode: Normal
+  page-template: Left Side Column
+  template-options: 
+  - '#DEFAULT#'
+
+navigation-menu: 
+  override-user-interface-level: false
+
+navigation: 
+  cursor-focus: Do not focus cursor
+  warn-on-unsaved-changes: false
+
+css: 
+  inline: |
+    /* Scroll Results Only in Side Column */
+    .t-Body-side {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .search-results {
+        flex: 1;
+        overflow: auto;
+    }
+    /* Format Search Region */
+    .search-region {
+        border-bottom: 1px solid rgba(0,0,0,.1);
+        flex-shrink: 0;
+    }
+
+security: 
+  authentication: Page Requires Authentication
+  deep-linking: Application Default
+  page-access-protection: Arguments Must Have Checksum
+  form-auto-complete: On
+  browser-cache: Application Default
+
+session-management: 
+  rejoin-sessions: Application Default
+
+advanced: 
+  enable-duplicate-page-submissions: No - Prevent page from being re-posted
+  reload-on-submit: Always
+
+server-cache: 
+  caching: Disabled
+
+regions: 
+- # ====== Region: Test Report =================================
+  id: 3932705404150267777
+  identification: 
+    name: Test Report
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_01
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Hero
+    template-options: 
+    - '#DEFAULT#'
+    - t-HeroRegion--hideIcon
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Search ======================================
+  id: 3932706679725267778
+  identification: 
+    name: Search
+    type: Static Content
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form--stretchInputs
+    css-classes: 
+    - search-region
+    - padding-md
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+- # ====== Region: Master Records ==============================
+  id: 3932707456061267779
+  identification: 
+    name: Master Records
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: SQL Query
+    sql-query: |
+      select "DEPTNO",
+          null LINK_CLASS,
+          apex_page.get_url(p_items => 'P7_DEPTNO', p_values => "DEPTNO") LINK,
+          null ICON_CLASS,
+          null LINK_ATTR,
+          null ICON_COLOR_CLASS,
+          case when coalesce(:P7_DEPTNO,'0') = "DEPTNO"
+            then 'is-active' 
+            else ' '
+          end LIST_CLASS,
+          (substr("DNAME", 1, 50)||( case when length("DNAME") > 50 then '...' else '' end )) LIST_TITLE,
+          (substr("LOC", 1, 50)||( case when length("LOC") > 50 then '...' else '' end )) LIST_TEXT,
+          null LIST_BADGE
+      from "DEPT" x
+      where (:P7_SEARCH is null
+              or upper(x."DNAME") like '%'||upper(:P7_SEARCH)||'%'
+              or upper(x."LOC") like '%'||upper(:P7_SEARCH)||'%'
+          )
+      order by "DNAME"
+    page-items-to-submit: 
+    - P7_SEARCH
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: REGION_POSITION_02
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes (No Grid)
+    template-options: 
+    - '#DEFAULT#'
+    css-classes: 
+    - search-results
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 1000
+
+    appearance: 
+      template-type: Theme
+      template: Media List
+      template-options: 
+      - t-MediaList--showDesc
+      - t-MediaList--stack
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 500
+
+    messages: 
+      when-no-data-found: <div class="u-tC">No data found.</div>
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: false
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: DEPTNO ======================================
+    id: 3932708114045267782
+    identification: 
+      column-name: DEPTNO
+      type: Plain Text
+
+    heading: 
+      heading: DEPTNO
+      alignment: center
+
+    layout: 
+      sequence: 1
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LINK_CLASS ==================================
+    id: 3932708594650267783
+    identification: 
+      column-name: LINK_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: LINK_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 2
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LINK ========================================
+    id: 3932708942310267783
+    identification: 
+      column-name: LINK
+      type: Plain Text
+
+    heading: 
+      heading: LINK
+      alignment: center
+
+    layout: 
+      sequence: 3
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ICON_CLASS ==================================
+    id: 3932709363608267783
+    identification: 
+      column-name: ICON_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: ICON_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 4
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LINK_ATTR ===================================
+    id: 3932709716795267784
+    identification: 
+      column-name: LINK_ATTR
+      type: Plain Text
+
+    heading: 
+      heading: LINK_ATTR
+      alignment: center
+
+    layout: 
+      sequence: 5
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ICON_COLOR_CLASS ============================
+    id: 3932710172233267784
+    identification: 
+      column-name: ICON_COLOR_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: ICON_COLOR_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 6
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_CLASS ==================================
+    id: 3932710548096267784
+    identification: 
+      column-name: LIST_CLASS
+      type: Plain Text
+
+    heading: 
+      heading: LIST_CLASS
+      alignment: center
+
+    layout: 
+      sequence: 7
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_TITLE ==================================
+    id: 3932710909006267784
+    identification: 
+      column-name: LIST_TITLE
+      type: Plain Text
+
+    heading: 
+      heading: LIST_TITLE
+      alignment: center
+
+    layout: 
+      sequence: 8
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_TEXT ===================================
+    id: 3932711360850267785
+    identification: 
+      column-name: LIST_TEXT
+      type: Plain Text
+
+    heading: 
+      heading: LIST_TEXT
+      alignment: center
+
+    layout: 
+      sequence: 9
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LIST_BADGE ==================================
+    id: 3932711771601267785
+    identification: 
+      column-name: LIST_BADGE
+      type: Plain Text
+
+    heading: 
+      heading: LIST_BADGE
+      alignment: center
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Dept ========================================
+  id: 3932712421047268045
+  identification: 
+    name: Dept
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: DEPT
+    include-rowid-column: false
+    where-clause: '"DEPTNO" = :P7_DEPTNO'
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 10
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--scrollBody
+    css-classes: 
+    - js-master-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P7_DEPTNO
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 15
+
+    appearance: 
+      template-type: Theme
+      template: Value Attribute Pairs - Column
+      template-options: 
+      - '#DEFAULT#'
+      - t-AVPList--leftAligned
+
+    pagination: 
+      type: No Pagination (Show All Rows)
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 500
+
+    messages: 
+      when-no-data-found: No Record Selected
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: true
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: DEPTNO ======================================
+    id: 3932713093589268045
+    identification: 
+      column-name: DEPTNO
+      type: Hidden
+
+    layout: 
+      sequence: 1
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "DEPT"
+        where "DEPTNO" is not null
+        and "DEPTNO" = :P7_DEPTNO
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DNAME =======================================
+    id: 3932713433603268046
+    identification: 
+      column-name: DNAME
+      type: Plain Text
+
+    heading: 
+      heading: Dname
+      alignment: start
+
+    layout: 
+      sequence: 2
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "DEPT"
+        where "DNAME" is not null
+        and "DEPTNO" = :P7_DEPTNO
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: LOC =========================================
+    id: 3932713843900268046
+    identification: 
+      column-name: LOC
+      type: Plain Text
+
+    heading: 
+      heading: Loc
+      alignment: start
+
+    layout: 
+      sequence: 3
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    server-side-condition: 
+      type: Rows returned
+      sql-query: |
+        select 1 from "DEPT"
+        where "LOC" is not null
+        and "DEPTNO" = :P7_DEPTNO
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: Region Display Selector =====================
+  id: 3932716749500268049
+  identification: 
+    name: Region Display Selector
+    type: Region Display Selector
+
+  layout: 
+    sequence: 20
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    - margin-bottom-md
+    css-classes: 
+    - js-detail-rds
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P7_DEPTNO
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      mode: View Single Region
+      display-region-icons: false
+      include-'show-all': true
+      remember-selection: N
+
+- # ====== Region: Emp =========================================
+  id: 3932717123324268050
+  identification: 
+    name: Emp
+    type: Classic Report
+
+  source: 
+    location: Local Database
+    type: Table / View
+    table-owner: Parsing Schema
+    table-name: EMP
+    include-rowid-column: true
+    where-clause: '"DEPTNO" = :P7_DEPTNO'
+
+  order-by: 
+    type: None
+
+  layout: 
+    sequence: 30
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Standard
+    template-options: 
+    - '#DEFAULT#'
+    - t-Region--noPadding
+    - t-Region--scrollBody
+    css-classes: 
+    - js-detail-region
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: true
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NOT NULL
+    item: P7_DEPTNO
+
+  server-cache: 
+    caching: Disabled
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    layout: 
+      number-of-rows-type: Static Value
+      number-of-rows: 100
+
+    appearance: 
+      template-type: Theme
+      template: Standard
+      template-options: 
+      - t-Report--stretch
+      - '#DEFAULT#'
+      - t-Report--altRowsDefault
+      - t-Report--rowHighlight
+      - t-Report--inline
+
+    pagination: 
+      type: Row Ranges X to Y (with next and previous links)
+      display-position: Bottom - Right
+      partial-page-refresh: true
+
+    performance: 
+      lazy-loading: false
+      maximum-rows-to-process: 5000
+
+    messages: 
+      when-no-data-found: No data found.
+
+    break-formatting: 
+      break-columns: No Break
+
+    advanced: 
+      strip-html: true
+      sort-nulls: Last
+
+    heading: 
+      type: Custom Headings
+
+    download: 
+      csv-export-enabled: false
+
+    printing: 
+      enabled: false
+
+  columns: 
+  - # ====== Column: ROWID =======================================
+    id: 3932718135251268173
+    identification: 
+      column-name: ROWID
+      type: Link
+
+    heading: 
+      heading: <span class="u-VisuallyHidden">Edit</span>
+      alignment: start
+
+    layout: 
+      sequence: 1
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:11:&APP_SESSION.::&DEBUG.:RP:P11_ROWID:#ROWID#'
+        page: 11 # Emp
+        clear-cache: RP
+        values: 
+          p11_rowid: '#ROWID#'
+
+      link-text: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      cell-width: 32
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: EMPNO =======================================
+    id: 3932718548392268173
+    identification: 
+      column-name: EMPNO
+      type: Plain Text
+
+    heading: 
+      heading: Empno
+      alignment: start
+
+    layout: 
+      sequence: 2
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: ENAME =======================================
+    id: 3932718932483268174
+    identification: 
+      column-name: ENAME
+      type: Plain Text
+
+    heading: 
+      heading: Ename
+      alignment: start
+
+    layout: 
+      sequence: 3
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: JOB =========================================
+    id: 3932719308652268174
+    identification: 
+      column-name: JOB
+      type: Plain Text
+
+    heading: 
+      heading: Job
+      alignment: start
+
+    layout: 
+      sequence: 4
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: MGR =========================================
+    id: 3932719743836268174
+    identification: 
+      column-name: MGR
+      type: Plain Text
+
+    heading: 
+      heading: Mgr
+      alignment: start
+
+    layout: 
+      sequence: 5
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: HIREDATE ====================================
+    id: 3932720189009268174
+    identification: 
+      column-name: HIREDATE
+      type: Plain Text
+
+    heading: 
+      heading: Hiredate
+      alignment: start
+
+    layout: 
+      sequence: 6
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: SAL =========================================
+    id: 3932720548503268174
+    identification: 
+      column-name: SAL
+      type: Plain Text
+
+    heading: 
+      heading: Sal
+      alignment: start
+
+    layout: 
+      sequence: 7
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: COMM ========================================
+    id: 3932720919337268175
+    identification: 
+      column-name: COMM
+      type: Plain Text
+
+    heading: 
+      heading: Comm
+      alignment: start
+
+    layout: 
+      sequence: 8
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: DEPTNO ======================================
+    id: 3932721333995268175
+    identification: 
+      column-name: DEPTNO
+      type: Hidden
+
+    layout: 
+      sequence: 9
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+  - # ====== Column: OFFSITE =====================================
+    id: 3932721717805268175
+    identification: 
+      column-name: OFFSITE
+      type: Plain Text
+
+    heading: 
+      heading: Offsite
+      alignment: start
+
+    layout: 
+      sequence: 10
+      column-alignment: start
+
+    accessibility: 
+      value-identifies-row: false
+
+    sorting: 
+      sortable: false
+
+    export-/-printing: 
+      include-in-export-/-print: true
+
+    advanced: 
+      compute-sum: false
+
+    ui-defaults-reference: 
+      table-owner: Parsing Schema
+
+    security: 
+      escape-special-characters: true
+
+- # ====== Region: No Record Selected ==========================
+  id: 3932740280314268294
+  identification: 
+    name: No Record Selected
+    type: Static Content
+
+  source: 
+    html-code: No Record Selected
+
+  layout: 
+    sequence: 70
+    parent-region: No Parent
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    template: Blank with Attributes
+    template-options: 
+    - '#DEFAULT#'
+    render-components: Above Content
+
+  accessibility: 
+    use-landmark: true
+    landmark-type: Template Default
+
+  advanced: 
+    region-display-selector: false
+    exclude-title-from-translation: false
+
+  server-side-condition: 
+    type: Item is NULL
+    item: P7_DEPTNO
+
+  customization: 
+    customizable: Not Customizable By End Users
+
+  attributes: 
+    settings: 
+      output-as: HTML
+      expand-shortcuts: false
+
+page-items: 
+- # ====== Page Item: P7_SEARCH ================================
+  id: 3932707103217267779
+  identification: 
+    name: P7_SEARCH
+    type: Text Field
+
+  label: 
+    label: Search
+    alignment: Right
+
+  settings: 
+    subtype: Text
+    trim-spaces: Leading and Trailing
+    text-case: NO CHANGE
+    submit-when-enter-pressed: false
+    disabled: false
+
+  layout: 
+    sequence: 10
+    region: Search # 3932706679725267778
+    slot: BODY
+    alignment: Left
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    label-column-span: Page Template Default
+
+  appearance: 
+    template: Hidden
+    template-options: 
+    - '#DEFAULT#'
+    - t-Form-fieldContainer--large
+    - t-Form-fieldContainer--postTextBlock
+    icon: fa-search
+    width: 30
+    value-placeholder: Search...
+
+  validation: 
+    value-required: false
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    storage: Per Session (Persistent)
+
+  quick-picks: 
+    show-quick-picks: false
+
+  security: 
+    session-state-protection: Unrestricted
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+- # ====== Page Item: P7_DEPTNO ================================
+  id: 3932716441907268049
+  identification: 
+    name: P7_DEPTNO
+    type: Hidden
+
+  settings: 
+    value-protected: true
+
+  layout: 
+    sequence: 40
+    region: Dept # 3932712421047268045
+    slot: BODY
+
+  advanced: 
+    warn-on-unsaved-changes: Page Default
+
+  source: 
+    type: Null
+    used: Only when current value in session state is null
+
+  session-state: 
+    data-type: VARCHAR2
+    storage: Per Session (Persistent)
+
+  security: 
+    session-state-protection: Checksum Required - Session Level
+    store-value-encrypted-in-session-state: true
+    restricted-characters: All characters can be saved.
+
+buttons: 
+- # ====== Button: RESET =======================================
+  id: 3932705994305267778
+  identification: 
+    button-name: RESET
+    label: Reset
+
+  layout: 
+    sequence: 10
+    region: Test Report # 3932705404150267777
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    - t-Button--iconLeft
+    - t-Button--gapRight
+    icon: fa-undo-alt
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:7:&APP_SESSION.:RESET:&DEBUG.:RP,7::'
+      page: 7 # Test Report
+      request: RESET
+      clear-cache: RP,7
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: CREATE ======================================
+  id: 3932706361654267778
+  identification: 
+    button-name: CREATE
+    label: Create
+
+  layout: 
+    sequence: 20
+    region: Test Report # 3932705404150267777
+    slot: NEXT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: true
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--iconLeft
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:10:&APP_SESSION.::&DEBUG.:RP,10::'
+      page: 10 # Dept
+      clear-cache: RP,10
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: POP_EMP =====================================
+  id: 3932725802903268180
+  identification: 
+    button-name: POP_EMP
+    label: Add Emp
+
+  layout: 
+    sequence: 10
+    region: Emp # 3932717123324268050
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    icon: fa-plus
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:11:&APP_SESSION.::&DEBUG.:RP,11:P11_DEPTNO:&P7_DEPTNO.'
+      page: 11 # Emp
+      clear-cache: RP,11
+      values: 
+        p11_deptno: '&P7_DEPTNO.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+- # ====== Button: EDIT ========================================
+  id: 3932740791447268294
+  identification: 
+    button-name: EDIT
+    label: Edit
+
+  layout: 
+    sequence: 20
+    region: Dept # 3932712421047268045
+    slot: EDIT
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+
+  appearance: 
+    button-template: Text with Icon
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+    - t-Button--noUI
+    - t-Button--iconLeft
+    icon: fa-pencil-square-o
+
+  behavior: 
+    action: Redirect to Page in this Application
+    target: 
+      url: 'f?p=&APP_ID.:10:&APP_SESSION.::&DEBUG.:RP,10:P10_DEPTNO:&P7_DEPTNO.'
+      page: 10 # Dept
+      clear-cache: RP,10
+      values: 
+        p10_deptno: '&P7_DEPTNO.'
+
+    warn-on-unsaved-changes: Do Not Check
+
+  advanced: 
+    static-id: edit_master_btn
+
+dynamic-actions: 
+- # ====== Dynamic Action: Dialog Closed =======================
+  id: 3932717205806268050
+  identification: 
+    name: Dialog Closed
+
+  execution: 
+    sequence: 40
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Emp # 3932717123324268050
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 3932726647468268181
+    identification: 
+      action: Refresh
+
+    affected-elements: 
+      selection-type: Region
+      region: Emp # 3932717123324268050
+
+    execution: 
+      sequence: 10
+      event: Dialog Closed # 3932717205806268050
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 3932727113560268181
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: apex.message.showPageSuccess('Emp row(s) updated.');
+
+    execution: 
+      sequence: 20
+      event: Dialog Closed # 3932717205806268050
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Dialog Closed =======================
+  id: 3932741098253268294
+  identification: 
+    name: Dialog Closed
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Dialog Closed
+    selection-type: Region
+    region: Dept # 3932712421047268045
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 3932741633446268295
+    identification: 
+      action: Refresh
+
+    affected-elements: 
+      selection-type: Region
+      region: Dept # 3932712421047268045
+
+    execution: 
+      sequence: 20
+      event: Dialog Closed # 3932741098253268294
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 3932742121339268295
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: apex.message.showPageSuccess('Dept row(s) updated.');
+
+    execution: 
+      sequence: 30
+      event: Dialog Closed # 3932741098253268294
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: Perform Search ======================
+  id: 3932741195776268294
+  identification: 
+    name: Perform Search
+
+  execution: 
+    sequence: 150
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Key Press
+    selection-type: Item(s)
+    item(s): 
+    - P7_SEARCH
+
+  client-side-condition: 
+    type: JavaScript expression
+    javascript-expression: this.browserEvent.which === apex.jQuery.ui.keyCode.ENTER
+
+  actions: 
+  - # ====== Action: Refresh =====================================
+    id: 3932742906389268295
+    identification: 
+      action: Refresh
+
+    affected-elements: 
+      selection-type: Region
+      region: Master Records # 3932707456061267779
+
+    execution: 
+      sequence: 10
+      event: Perform Search # 3932741195776268294
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+  - # ====== Action: Cancel Event ================================
+    id: 3932743475022268296
+    identification: 
+      action: Cancel Event
+
+    execution: 
+      sequence: 30
+      event: Perform Search # 3932741195776268294
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

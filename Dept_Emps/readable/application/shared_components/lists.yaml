@@ -5,12 +5,55 @@
     name: Navigation Menu
 
   subscription: 
-    version-number: 1
+    version-number: 15539012108611
 
   source: 
     type: Static Values
 
   entries: 
+  - # ====== Entry: Test Report ==================================
+    id: 3932705067909267777
+    label: 
+      label: Test Report
+
+    icon: 
+      image/icon-css-classes: fa-layout-header-sidebar-left
+
+    layout: 
+      sequence: 50
+      parent-entry: Home # 117785648697147253270
+
+    is-current: 
+      type: Pages
+      pages: 
+      - 7
+
+    link: 
+      target: 
+        url: 'f?p=&APP_ID.:7:&APP_SESSION.::&DEBUG.:::'
+        page: 7 # Test Report
+
+    click-counting: 
+      count-clicks: false
+
+    user-defined-attributes: 
+      translatable: false
+
+  - # ====== Entry: test =========================================
+    id: 3933018188658511562
+    label: 
+      label: test
+
+    layout: 
+      sequence: 1001011
+      parent-entry: Home # 117785648697147253270
+
+    is-current: 
+      type: Target Page
+
+    user-defined-attributes: 
+      translatable: false
+
   - # ====== Entry: Home =========================================
     id: 117785648697147253270
     label: 

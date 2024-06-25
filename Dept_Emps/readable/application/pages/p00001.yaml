@@ -132,3 +132,89 @@ regions:
       - t-Cards--hideBody
       - t-Cards--animColorFill
 
+buttons: 
+- # ====== Button: test ========================================
+  id: 3932617662077256701
+  identification: 
+    button-name: test
+    label: Test
+
+  layout: 
+    sequence: 10
+    region: Page Navigation # 117785713161343253915
+    slot: BODY
+    start-new-layout: false
+    start-new-row: true
+    column: Automatic
+    new-column: true
+    column-span: Automatic
+    alignment: Left center
+
+  appearance: 
+    button-template: Text
+    hot: false
+    template-options: 
+    - '#DEFAULT#'
+
+  behavior: 
+    action: Defined by Dynamic Action
+    execute-validations: true
+
+dynamic-actions: 
+- # ====== Dynamic Action: New =================================
+  id: 3932617714501256702
+  identification: 
+    name: New
+
+  execution: 
+    sequence: 10
+    event-scope: Static
+    type: Immediate
+
+  when: 
+    event: Click
+    selection-type: Button
+    button: test # 3932617662077256701
+
+  actions: 
+  - # ====== Action: Submit Page =================================
+    id: 3932617866877256703
+    identification: 
+      action: Submit Page
+
+    settings: 
+      show-processing: true
+
+    execution: 
+      sequence: 10
+      event: New # 3932617714501256702
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+
+- # ====== Dynamic Action: test ================================
+  id: 3932617947936256704
+  identification: 
+    name: test
+
+  execution: 
+    sequence: 20
+    event-scope: Static
+
+  when: 
+    event: Page Load
+
+  actions: 
+  - # ====== Action: Execute JavaScript Code =====================
+    id: 3932618045875256705
+    identification: 
+      action: Execute JavaScript Code
+
+    settings: 
+      code: console.log("Hello World");
+
+    execution: 
+      sequence: 10
+      event: test # 3932617947936256704
+      fire-when-event-result-is: True
+      fire-on-initialization: false
+

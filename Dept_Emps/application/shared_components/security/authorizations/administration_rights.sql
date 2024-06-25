@@ -17,8 +17,10 @@ wwv_flow_imp_shared.create_security_scheme(
 ,p_scheme_type=>'NATIVE_IS_IN_GROUP'
 ,p_attribute_01=>'Administrator'
 ,p_attribute_02=>'A'
-,p_error_message=>'Insufficient privileges, user is not an Administrator'
-,p_version_scn=>1
+,p_error_message=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'Insufficient privileges, user is not an Administrator',
+'Test new changes to authorization scheme'))
+,p_version_scn=>15539011600225
 ,p_caching=>'BY_USER_BY_PAGE_VIEW'
 );
 wwv_flow_imp.component_end;
